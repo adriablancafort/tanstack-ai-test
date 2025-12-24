@@ -11,6 +11,15 @@ importers:
       '@hono/node-server':
         specifier: ^1.19.6
         version: 1.19.7(hono@4.11.1)
+      '@tanstack/ai':
+        specifier: ^0.2.0
+        version: 0.2.0
+      '@tanstack/ai-openai':
+        specifier: ^0.2.0
+        version: 0.2.0(@tanstack/ai@0.2.0)(zod@4.2.1)
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       hono:
         specifier: ^4.11.1
         version: 4.11.1
@@ -189,8 +198,26 @@ packages:
     peerDependencies:
       hono: ^4
 
+  '@tanstack/ai-openai@0.2.0':
+    resolution: {integrity: sha512-xxDbG2+nqdOXCj4QGiA3y2zxY2DfUw+Hzb7jjUvpWKUiu02atIKFIrmH8ccdjNq1O4K2dh8J9nSK7RP84tSkpQ==}
+    peerDependencies:
+      '@tanstack/ai': ^0.2.0
+      zod: ^4.0.0
+
+  '@tanstack/ai@0.2.0':
+    resolution: {integrity: sha512-liGeP7pa7YsgDbUQZOSBHSunWXTQ9FdzDeBGFnDXt9iXF8Fa/GyYu+x2w8IwjK9aWaKLd4CNpULRbzwHP5SzYA==}
+    engines: {node: '>=18'}
+
+  '@tanstack/devtools-event-client@0.4.0':
+    resolution: {integrity: sha512-RPfGuk2bDZgcu9bAJodvO2lnZeHuz4/71HjZ0bGb/SPg8+lyTA+RLSKQvo7fSmPSi8/vcH3aKQ8EM9ywf1olaw==}
+    engines: {node: '>=18'}
+
   '@types/node@20.19.27':
     resolution: {integrity: sha512-N2clP5pJhB2YnZJ3PIHFk5RkygRX5WO/5f0WC08tp0wd+sv0rsJk3MqWn3CbNmT2J505a5336jaQj4ph1AdMug==}
+
+  dotenv@17.2.3:
+    resolution: {integrity: sha512-JVUnt+DUIzu87TABbhPmNfVdBDt18BLOWjMUFJMSi/Qqg7NTYtabbvSNJGOJ7afbRuv9D/lngizHtP7QyLQ+9w==}
+    engines: {node: '>=12'}
 
   esbuild@0.27.2:
     resolution: {integrity: sha512-HyNQImnsOC7X9PMNaCIeAm4ISCQXs5a5YasTXVliKv4uuBo1dKrG0A+uQS8M5eXjVMnLg3WgXaKvprHlFJQffw==}
@@ -209,6 +236,21 @@ packages:
     resolution: {integrity: sha512-KsFcH0xxHes0J4zaQgWbYwmz3UPOOskdqZmItstUG93+Wk1ePBLkLGwbP9zlmh1BFUiL8Qp+Xfu9P7feJWpGNg==}
     engines: {node: '>=16.9.0'}
 
+  openai@6.15.0:
+    resolution: {integrity: sha512-F1Lvs5BoVvmZtzkUEVyh8mDQPPFolq4F+xdsx/DO8Hee8YF3IGAlZqUIsF+DVGhqf4aU0a3bTghsxB6OIsRy1g==}
+    hasBin: true
+    peerDependencies:
+      ws: ^8.18.0
+      zod: ^3.25 || ^4.0
+    peerDependenciesMeta:
+      ws:
+        optional: true
+      zod:
+        optional: true
+
+  partial-json@0.1.7:
+    resolution: {integrity: sha512-Njv/59hHaokb/hRUjce3Hdv12wd60MtM9Z5Olmn+nehe0QDAsRtRbJPvJ0Z91TusF0SuZRIvnM+S4l6EIP8leA==}
+
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
 
@@ -224,6 +266,9 @@ packages:
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
+  zod@4.2.1:
+    resolution: {integrity: sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==}
 
 snapshots:
 
@@ -309,9 +354,26 @@ snapshots:
     dependencies:
       hono: 4.11.1
 
+  '@tanstack/ai-openai@0.2.0(@tanstack/ai@0.2.0)(zod@4.2.1)':
+    dependencies:
+      '@tanstack/ai': 0.2.0
+      openai: 6.15.0(zod@4.2.1)
+      zod: 4.2.1
+    transitivePeerDependencies:
+      - ws
+
+  '@tanstack/ai@0.2.0':
+    dependencies:
+      '@tanstack/devtools-event-client': 0.4.0
+      partial-json: 0.1.7
+
+  '@tanstack/devtools-event-client@0.4.0': {}
+
   '@types/node@20.19.27':
     dependencies:
       undici-types: 6.21.0
+
+  dotenv@17.2.3: {}
 
   esbuild@0.27.2:
     optionalDependencies:
@@ -351,6 +413,12 @@ snapshots:
 
   hono@4.11.1: {}
 
+  openai@6.15.0(zod@4.2.1):
+    optionalDependencies:
+      zod: 4.2.1
+
+  partial-json@0.1.7: {}
+
   resolve-pkg-maps@1.0.0: {}
 
   tsx@4.21.0:
@@ -363,3 +431,5 @@ snapshots:
   typescript@5.9.3: {}
 
   undici-types@6.21.0: {}
+
+  zod@4.2.1: {}
