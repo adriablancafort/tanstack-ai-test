@@ -21,6 +21,10 @@ import {
   PromptInputTools,
   type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
+import { Label } from "@/components/ui/label";
 import { CopyIcon, RefreshCcwIcon } from "lucide-react";
 import { tools } from "@/agent/tools";
 
@@ -29,7 +33,7 @@ export function Chat() {
 
   const apiUrl = import.meta.env.VITE_API_URL!;
 
-  const { messages, sendMessage, isLoading } = useChat({
+  const { messages, sendMessage, isLoading, addToolApprovalResponse } = useChat({
     connection: fetchServerSentEvents(`${apiUrl}/api/chat`),
     tools,
   });
@@ -96,6 +100,50 @@ export function Chat() {
                       );
 
                     case "tool-call":
+                      if (part.state === "approval-requested") {
+                        return (
+                          <Message key={part.id} from={message.role}>
+                            <MessageContent>
+                              <Card className="m-0.5">
+                                <CardHeader>
+                                  <CardTitle>Approve: {part.name}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                  <Field>
+                                    <Label>Arguments</Label>
+                                    <pre className="text-xs bg-background rounded p-2 border overflow-x-auto"><code>{JSON.stringify(part.arguments, null, 2)}</code></pre>
+                                  </Field>
+                                  <div className="flex gap-3 mt-5">
+                                    <Button
+                                      variant="default"
+                                      onClick={() =>
+                                        addToolApprovalResponse({
+                                          id: part.approval.id,
+                                          approved: true,
+                                        })
+                                      }
+                                    >
+                                      Approve
+                                    </Button>
+                                    <Button
+                                      variant="destructive"
+                                      onClick={() =>
+                                        addToolApprovalResponse({
+                                          id: part.approval.id,
+                                          approved: false,
+                                        })
+                                      }
+                                    >
+                                      Deny
+                                    </Button>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            </MessageContent>
+                          </Message>
+                        );
+                      }
+
                       return (
                         <Message key={part.id} from={message.role}>
                           <MessageContent>

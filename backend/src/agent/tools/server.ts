@@ -1,4 +1,4 @@
-import { getWeatherDef } from '@/agent/tools/definitions';
+import { getWeatherDef, sendEmailDef } from '@/agent/tools/definitions';
 
 interface GeocodingResponse {
   results: {
@@ -66,5 +66,16 @@ export const getWeather = getWeatherDef.server(async (input) => {
     temperature: data.current.temperature_2m,
     unit: data.current_units.temperature_2m,
     location: name,
+  };
+});
+
+export const sendEmail = sendEmailDef.server(async (input) => {
+  const { to, subject, body } = input as { to: string; subject: string; body: string };
+
+  console.log('Sending email:', { to, subject, body });
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  return {
+    success: true
   };
 });
