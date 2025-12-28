@@ -22,6 +22,7 @@ import {
   type PromptInputMessage,
 } from "@/components/ai-elements/prompt-input";
 import { CopyIcon, RefreshCcwIcon } from "lucide-react";
+import { tools } from "@/agent/tools";
 
 export function Chat() {
   const [input, setInput] = useState("");
@@ -30,6 +31,7 @@ export function Chat() {
 
   const { messages, sendMessage, isLoading } = useChat({
     connection: fetchServerSentEvents(`${apiUrl}/api/chat`),
+    tools,
   });
 
   function handleSubmit(message: PromptInputMessage) {
@@ -39,7 +41,7 @@ export function Chat() {
     }
   }
 
-  const status = isLoading ? "submitted" : "idle";
+  const status = isLoading ? "streaming" : undefined;
 
   return (
     <div className="max-w-4xl mx-auto relative size-full h-screen">
@@ -81,6 +83,7 @@ export function Chat() {
                           )}
                         </Message>
                       );
+
                     case "thinking":
                       return (
                         <Message key={`${message.id}-${i}`} from={message.role}>
@@ -91,6 +94,53 @@ export function Chat() {
                           </MessageContent>
                         </Message>
                       );
+
+                    case "tool-call":
+                      return (
+                        <Message key={part.id} from={message.role}>
+                          <MessageContent>
+                            <div className="text-sm border rounded-lg p-3 bg-muted/50">
+                              <div className="font-medium mb-2">🔧 {part.name}</div>
+                              {part.state === "awaiting-input" && (
+                                <div className="text-muted-foreground flex items-center gap-2">
+                                  Calling {part.name}...
+                                </div>
+                              )}
+                              {part.state === "input-streaming" && (
+                                <div className="text-muted-foreground flex items-center gap-2">
+                                  Receiving arguments...
+                                </div>
+                              )}
+                              {part.state === "input-complete" && (
+                                <div className="text-muted-foreground">
+                                  Arguments ready
+                                </div>
+                              )}
+                            </div>
+                          </MessageContent>
+                        </Message>
+                      );
+
+                    case "tool-result":
+                      return (
+                        <Message key={part.toolCallId} from={message.role}>
+                          <MessageContent>
+                            <div className="text-sm border rounded-lg p-3 bg-muted/50">
+                              {part.state === "complete" && (
+                                <div className="text-green-600 flex items-center gap-2">
+                                  Tool completed
+                                </div>
+                              )}
+                              {part.state === "error" && (
+                                <div className="text-red-600 flex items-center gap-2">
+                                  Error: {part.error}
+                                </div>
+                              )}
+                            </div>
+                          </MessageContent>
+                        </Message>
+                      );
+
                     default:
                       return null;
                   }

@@ -5,6 +5,7 @@ import { cors } from 'hono/cors'
 import { streamSSE } from 'hono/streaming'
 import { chat } from '@tanstack/ai'
 import { openaiText } from '@tanstack/ai-openai'
+import { tools } from '@/agent/tools'
 
 const app = new Hono()
 
@@ -20,6 +21,7 @@ app.post('/api/chat', async (c) => {
     const aiStream = chat({
       adapter: openaiText('gpt-4o'),
       messages,
+      tools,
     })
 
     for await (const chunk of aiStream) {
