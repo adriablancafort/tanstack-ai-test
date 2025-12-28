@@ -4,15 +4,14 @@ import { z } from "zod";
 // Server
 export const getWeatherDef = toolDefinition({
   name: "get_weather",
-  description: "Get the current weather for a location",
+  description: "Get the current weather for a city",
   inputSchema: z.object({
-    location: z.string().describe("The city and state, e.g. San Francisco, CA"),
-    unit: z.enum(["celsius", "fahrenheit"]).optional(),
+    city: z.string().describe("City name, e.g. San Francisco"),
   }),
   outputSchema: z.object({
-    temperature: z.number(),
-    conditions: z.string(),
-    location: z.string(),
+    temperature: z.number().describe("Current temperature at the location"),
+    unit: z.string().describe("Unit of the temperature, e.g. °C or °F"),
+    location: z.string().describe("Resolved location name"),
   }),
 });
 
