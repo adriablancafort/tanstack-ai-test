@@ -88,8 +88,8 @@ export function Chat() {
                       return (
                         <Message key={`${message.id}-${i}`} from={message.role}>
                           <MessageContent>
-                            <div className="text-sm text-muted-foreground italic">
-                              💭 Thinking: {part.content}
+                            <div className="text-muted-foreground">
+                              Thinking: {part.content}
                             </div>
                           </MessageContent>
                         </Message>
@@ -99,23 +99,8 @@ export function Chat() {
                       return (
                         <Message key={part.id} from={message.role}>
                           <MessageContent>
-                            <div className="text-sm border rounded-lg p-3 bg-muted/50">
-                              <div className="font-medium mb-2">🔧 {part.name}</div>
-                              {part.state === "awaiting-input" && (
-                                <div className="text-muted-foreground flex items-center gap-2">
-                                  Calling {part.name}...
-                                </div>
-                              )}
-                              {part.state === "input-streaming" && (
-                                <div className="text-muted-foreground flex items-center gap-2">
-                                  Receiving arguments...
-                                </div>
-                              )}
-                              {part.state === "input-complete" && (
-                                <div className="text-muted-foreground">
-                                  Arguments ready
-                                </div>
-                              )}
+                            <div className="rounded-lg px-3 py-1 mb-2 bg-muted">
+                              <div className="font-medium">{part.name}</div>
                             </div>
                           </MessageContent>
                         </Message>
@@ -125,14 +110,14 @@ export function Chat() {
                       return (
                         <Message key={part.toolCallId} from={message.role}>
                           <MessageContent>
-                            <div className="text-sm border rounded-lg p-3 bg-muted/50">
+                            <div className="rounded-lg px-3 py-1 mb-2 bg-muted">
                               {part.state === "complete" && (
-                                <div className="text-green-600 flex items-center gap-2">
-                                  Tool completed
+                                <div className="text-green-600">
+                                  Completed
                                 </div>
                               )}
                               {part.state === "error" && (
-                                <div className="text-red-600 flex items-center gap-2">
+                                <div className="text-red-600">
                                   Error: {part.error}
                                 </div>
                               )}
